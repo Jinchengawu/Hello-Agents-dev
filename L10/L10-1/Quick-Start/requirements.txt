@@ -1,0 +1,3 @@
+hello-agents[protocol]==0.2.2
+python-dotenv>=1,<2
+

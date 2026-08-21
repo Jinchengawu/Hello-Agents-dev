@@ -1,0 +1,4 @@
+hello-agents[rl]==0.2.5
+accelerate>=1,<2
+python-dotenv>=1,<2
+

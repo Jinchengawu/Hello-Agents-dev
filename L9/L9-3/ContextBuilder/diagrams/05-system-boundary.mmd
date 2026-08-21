@@ -1,0 +1,21 @@
+%% 图 05：GSSC ContextBuilder 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：目标、状态与历史"] --> C1
+    subgraph Local["本地实践边界：L9/L9-3/ContextBuilder"]
+        C1["目标 Goal"]
+        C2["状态 State"]
+        C3["步骤 Step"]
+        C4["上下文构建器"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["Memory/RAG"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：结构化 Agent 上下文"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

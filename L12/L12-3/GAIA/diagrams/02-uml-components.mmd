@@ -1,0 +1,39 @@
+%% 图 02：GAIA 通用 Agent 评估 UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行GAIA 数据集职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行工具型 Agent职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行任务执行器职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行答案规范化与评分职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 05_gaia_quick_start.py / 06_gaia_best_practices.py"
+    note for Core1 "中文职责：GAIA 数据集"
+    note for Core2 "中文职责：工具型 Agent"
+    note for Core3 "中文职责：任务执行器"
+    note for Core4 "中文职责：答案规范化与评分"
+    note for ExternalResource "中文注释：DeepSeek API、Hugging Face、搜索工具"

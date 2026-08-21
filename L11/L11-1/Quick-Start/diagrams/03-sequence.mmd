@@ -1,0 +1,22 @@
+%% 图 03：Agentic RL 快速实验 UML 时序图
+%% 中文注释：纵向表示时间，箭头表示调用、数据或结果返回。
+sequenceDiagram
+    autonumber
+    actor User as 学习者/调用方
+    participant Entry as 入口脚本
+    participant C1 as RLTrainingTool
+    participant C2 as 数据加载
+    participant C3 as SFT 快速训练
+    participant C4 as GRPO 与奖励函数
+    participant Ext as 外部资源
+    User->>Entry: 提供训练配置与小样本数据
+    Note over User,Entry: 中文注释：从 00_quick_test.py 启动
+    Entry->>C1: 初始化并提交任务
+    C1->>C2: 传递阶段结果
+    C2->>C3: 传递阶段结果
+    C3->>C4: 传递阶段结果
+    C4->>Ext: 按需调用Hugging Face、本地训练设备
+    Ext-->>C4: 返回外部结果
+    C4-->>Entry: 返回SFT/GRPO 测试模型
+    Entry-->>User: 展示结果或错误
+    Note over Entry,Ext: 中文注释：异常时应保留上下文并明确失败阶段

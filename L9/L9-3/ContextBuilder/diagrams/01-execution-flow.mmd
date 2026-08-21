@@ -1,0 +1,11 @@
+%% 图 01：GSSC ContextBuilder 总执行流程
+%% 中文注释：实线为执行顺序，虚线为外部资源或记忆提示。
+flowchart TD
+    A["① 启动入口：01_context_builder_basic.py / 02_context_builder_with_agent.py"] --> S1["② 接收目标"]
+    S1 --> S2["3 收集状态"]
+    S2 --> S3["4 规划步骤"]
+    S3 --> S4["5 压缩上下文"]
+    S4 --> S5["6 交给 Agent"]
+    S5 --> O["输出：结构化 Agent 上下文"]
+    R["外部依赖：DeepSeek API、Memory/RAG"] -. "提供能力" .-> S2
+    N["中文记忆注释：接收目标 → 收集状态 → 规划步骤 → 压缩上下文 → 交给 Agent"] -. "复习主线" .-> A

@@ -1,0 +1,39 @@
+%% 图 02：Agentic RL 快速实验 UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行RLTrainingTool职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行数据加载职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行SFT 快速训练职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行GRPO 与奖励函数职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 00_quick_test.py"
+    note for Core1 "中文职责：RLTrainingTool"
+    note for Core2 "中文职责：数据加载"
+    note for Core3 "中文职责：SFT 快速训练"
+    note for Core4 "中文职责：GRPO 与奖励函数"
+    note for ExternalResource "中文注释：Hugging Face、本地训练设备"

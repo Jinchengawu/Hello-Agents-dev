@@ -1,0 +1,39 @@
+%% 图 02：GRPO 强化学习训练 UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行策略模型职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行奖励函数组职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行GRPO Trainer职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行训练监控职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 05_grpo_training.py"
+    note for Core1 "中文职责：策略模型"
+    note for Core2 "中文职责：奖励函数组"
+    note for Core3 "中文职责：GRPO Trainer"
+    note for Core4 "中文职责：训练监控"
+    note for ExternalResource "中文注释：Hugging Face、GPU"

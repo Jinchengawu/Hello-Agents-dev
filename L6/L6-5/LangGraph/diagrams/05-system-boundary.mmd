@@ -1,0 +1,21 @@
+%% 图 05：LangGraph 智能搜索助手 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：用户自然语言问题"] --> C1
+    subgraph Local["本地实践边界：L6/L6-5/LangGraph"]
+        C1["SearchState 状态"]
+        C2["查询理解节点"]
+        C3["Tavily 搜索节点"]
+        C4["答案生成节点"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["Tavily API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：带来源的回答"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

@@ -1,0 +1,19 @@
+%% 图 05：AgentScope 三国狼人杀 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：玩家数量与角色规则"] --> C1
+    subgraph Local["本地实践边界：L6/L6-3/AgentScope"]
+        C1["游戏控制器"]
+        C2["ReActAgent 玩家"]
+        C3["MsgHub 消息中心"]
+        C4["角色与结构化输出"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C4 --> O["输出：游戏事件与胜负结果"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

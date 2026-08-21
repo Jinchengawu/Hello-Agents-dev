@@ -1,0 +1,23 @@
+%% 图 05：数据生成与多方式评估 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：AIME 参考题与生成配置"] --> C1
+    subgraph Local["本地实践边界：L12/L12-4/Data-Generation-Evaluation"]
+        C1["AIME 数据生成器"]
+        C2["LLM Judge"]
+        C3["Win Rate 评估器"]
+        C4["报告与人工验证"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["Hugging Face"]
+        R3["Gradio"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C3 -. "访问" .-> R3
+    C4 --> O["输出：生成数据、评分和报告"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

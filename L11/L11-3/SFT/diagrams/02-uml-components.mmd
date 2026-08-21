@@ -1,0 +1,39 @@
+%% 图 02：LoRA 与监督微调 UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行基础模型职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行LoRA 配置职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行SFT Trainer职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行检查点与适配器职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 03_lora_configuration.py / 04_sft_training.py"
+    note for Core1 "中文职责：基础模型"
+    note for Core2 "中文职责：LoRA 配置"
+    note for Core3 "中文职责：SFT Trainer"
+    note for Core4 "中文职责：检查点与适配器"
+    note for ExternalResource "中文注释：Hugging Face、GPU/Apple Silicon"

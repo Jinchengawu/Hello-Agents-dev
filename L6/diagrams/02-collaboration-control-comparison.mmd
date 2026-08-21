@@ -1,0 +1,26 @@
+%% L6 图 02：协作范式与控制方式对比
+%% 中文注释：位置表达主要设计重心，不表示框架只能工作在某一区域。
+flowchart LR
+    subgraph Emergent["更依赖角色与对话涌现"]
+        CAMEL["CAMEL<br/>双角色深度协作<br/>提示驱动"]
+        AutoGen["AutoGen<br/>多角色群聊<br/>调度与终止规则"]
+    end
+
+    subgraph Explicit["更依赖显式结构与控制"]
+        LangGraph["LangGraph<br/>状态、节点、边<br/>分支与循环"]
+    end
+
+    subgraph Engineering["工程化能力维度"]
+        AgentScope["AgentScope<br/>消息驱动<br/>并发、容错、分布式、可观测"]
+    end
+
+    CAMEL -->|"增加参与者与路由需求"| AutoGen
+    AutoGen -->|"增加确定性与审计需求"| LangGraph
+    CAMEL -. "生产化要求" .-> AgentScope
+    AutoGen -. "生产化要求" .-> AgentScope
+    LangGraph -. "服务化要求" .-> AgentScope
+
+    N1["中文注释：涌现越强，灵活性通常越高，但结果更难预测"] -.-> Emergent
+    N2["中文注释：控制越显式，流程更易追踪，但设计工作更多"] -.-> Explicit
+    N3["中文注释：工程化是另一条比较轴，不等同于流程控制强弱"] -.-> Engineering
+

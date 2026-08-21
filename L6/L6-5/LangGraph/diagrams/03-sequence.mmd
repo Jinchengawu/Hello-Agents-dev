@@ -1,0 +1,22 @@
+%% 图 03：LangGraph 智能搜索助手 UML 时序图
+%% 中文注释：纵向表示时间，箭头表示调用、数据或结果返回。
+sequenceDiagram
+    autonumber
+    actor User as 学习者/调用方
+    participant Entry as 入口脚本
+    participant C1 as SearchState 状态
+    participant C2 as 查询理解节点
+    participant C3 as Tavily 搜索节点
+    participant C4 as 答案生成节点
+    participant Ext as 外部资源
+    User->>Entry: 提供用户自然语言问题
+    Note over User,Entry: 中文注释：从 Dialogue_System.py 启动
+    Entry->>C1: 初始化并提交任务
+    C1->>C2: 传递阶段结果
+    C2->>C3: 传递阶段结果
+    C3->>C4: 传递阶段结果
+    C4->>Ext: 按需调用DeepSeek API、Tavily API
+    Ext-->>C4: 返回外部结果
+    C4-->>Entry: 返回带来源的回答
+    Entry-->>User: 展示结果或错误
+    Note over Entry,Ext: 中文注释：异常时应保留上下文并明确失败阶段

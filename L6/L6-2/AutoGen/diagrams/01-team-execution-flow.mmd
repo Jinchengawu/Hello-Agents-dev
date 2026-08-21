@@ -1,0 +1,31 @@
+%% 图 01：AutoGen 团队总执行流程
+%% 中文注释：实线表示执行顺序；虚线表示配置或约束作用于团队。
+flowchart TD
+    A["① 执行 python main.py"] --> B["② load_dotenv：读取 .env"]
+    B --> C["③ parse_args：解析任务、轮数、自动验收"]
+    C --> D{"④ max_turns 是否大于 0？"}
+    D -- "否：参数非法" --> E["终止：显示中文配置错误"]
+    D -- "是：继续" --> F["⑤ asyncio.run：启动异步事件循环"]
+    F --> G["⑥ 解析并校验 DeepSeek API Key"]
+    G --> H{"密钥是否有效？"}
+    H -- "否" --> E
+    H -- "是" --> I["⑦ 创建 DeepSeek 模型客户端"]
+    I --> J["⑧ 创建产品经理 Agent"]
+    I --> K["⑧ 创建工程师 Agent"]
+    I --> L["⑧ 创建代码审查 Agent"]
+    I --> M["⑧ 创建用户代理 Agent"]
+    J --> N["⑨ 组装 RoundRobinGroupChat"]
+    K --> N
+    L --> N
+    M --> N
+    O["终止规则：消息包含 TERMINATE"] -. "业务约束" .-> N
+    P["轮数上限：max_turns"] -. "安全约束" .-> N
+    N --> Q["⑩ run_stream：开始轮询协作"]
+    Q --> R["Console：实时显示消息流"]
+    R --> S{"满足任一终止条件？"}
+    S -- "否：继续下一位 Agent" --> Q
+    S -- "是：结束协作" --> T["返回 TaskResult"]
+    T --> U["⑪ finally：关闭模型客户端"]
+    U --> V["⑫ 输出协作结果摘要"]
+    X["记忆主线：配置 → 模型 → 角色 → 团队 → 轮询 → 关闭"] -. "复习提示" .-> F
+

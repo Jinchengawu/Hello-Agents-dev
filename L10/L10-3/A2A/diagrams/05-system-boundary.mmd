@@ -1,0 +1,21 @@
+%% 图 05：A2A 智能体通信 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：跨 Agent 任务"] --> C1
+    subgraph Local["本地实践边界：L10/L10-3/A2A"]
+        C1["A2A Server"]
+        C2["A2A Client"]
+        C3["Agent Network"]
+        C4["协商与客服 Agent"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["本地 A2A 端口"]
+        R2["DeepSeek API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：A2A 消息与协作结果"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

@@ -1,0 +1,20 @@
+%% 图 06：Streamlit 成品应用数据流
+%% 中文注释：成功路径展示指标；失败路径捕获异常并向用户降级提示。
+flowchart TD
+    A["① 启动 Streamlit：output.py"] --> B["② render_app：设置页面标题"]
+    B --> C{"③ 用户是否点击刷新？"}
+    C -- "是" --> D["st.rerun：重新执行脚本"]
+    C -- "否" --> E["st.spinner：显示加载状态"]
+    D --> E
+    E --> F["④ get_bitcoin_price：请求价格"]
+    F --> G["⑤ GET CoinGecko /simple/price"]
+    G --> H{"⑥ HTTP、JSON、字段解析成功？"}
+    H -- "成功路径" --> I["返回美元价格与 24h 涨跌幅"]
+    I --> J["st.metric：渲染价格指标"]
+    H -- "失败路径" --> K["捕获网络、字段或类型异常"]
+    K --> L["st.error：显示具体错误"]
+    L --> M["返回 None, None"]
+    M --> N["st.warning：提示稍后重试"]
+    X["可靠性注释：timeout=10 防止请求无限等待"] -.-> G
+    Y["可靠性注释：raise_for_status 检查非 2xx 响应"] -.-> H
+

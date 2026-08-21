@@ -1,0 +1,19 @@
+%% 图 05：AutoGen 与 Streamlit 两条运行链路边界
+%% 中文注释：两条链路独立启动，依赖的外部 API 也不同。
+flowchart LR
+    subgraph A["链路 A：多智能体协作"]
+        A1["入口：main.py"] --> A2["AutoGen 四智能体团队"]
+        A2 --> A3["外部依赖：DeepSeek API"]
+        A2 --> A4["输出：终端中的方案、代码、审查结果"]
+    end
+    subgraph B["链路 B：交付应用运行"]
+        B1["入口：浏览器"] --> B2["Streamlit / output.py"]
+        B2 --> B3["外部依赖：CoinGecko API"]
+        B3 --> B2
+        B2 --> B4["输出：价格和 24 小时涨跌幅"]
+    end
+    A4 -. "教程中形成交付代码；不会自动启动" .-> B2
+    N1["注释：运行 main.py 需要 DeepSeek Key"] -.-> A1
+    N2["注释：运行 output.py 不需要 DeepSeek Key"] -.-> B2
+    N3["注释：两条链路需使用不同启动命令"] -.-> A4
+

@@ -1,0 +1,4 @@
+hello-agents[all]==0.2.0
+gradio>=4,<7
+python-dotenv>=1,<2
+

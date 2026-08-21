@@ -1,0 +1,19 @@
+%% 图 07：启动与排错决策图
+%% 中文注释：先确认入口，再检查该入口独有的依赖，减少无效排查。
+flowchart TD
+    A["现象：项目无法正常运行"] --> B{"第一步：运行的是哪个入口？"}
+    B -- "AutoGen：main.py" --> C{"是否激活 .venv 并安装 requirements？"}
+    C -- "否" --> C1["创建并激活虚拟环境，然后安装依赖"]
+    C -- "是" --> D{".env 中是否为真实 DeepSeek Key？"}
+    D -- "否" --> D1["复制 .env.example 并填写 LLM_API_KEY"]
+    D -- "是" --> E{"终端显示哪类错误？"}
+    E -- "401 或 AuthenticationError" --> E1["核对 Key、模型名和 base URL"]
+    E -- "连接超时" --> E2["检查网络、代理和 DeepSeek 服务状态"]
+    E -- "对话不停止" --> E3["输入 TERMINATE 或降低 --max-turns"]
+    B -- "Web 应用：output.py" --> F{"Streamlit 是否安装？"}
+    F -- "否" --> C1
+    F -- "是" --> G{"浏览器页面能否打开？"}
+    G -- "否" --> G1["使用 python -m streamlit run output.py"]
+    G -- "能打开但无价格" --> H["检查 CoinGecko 网络访问和页面错误信息"]
+    N["排错原则：入口 → 环境 → 配置 → 网络 → 业务终止"] -. "中文记忆提示" .-> A
+

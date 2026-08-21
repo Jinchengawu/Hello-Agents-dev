@@ -1,0 +1,39 @@
+%% 图 04：轮询团队状态图
+%% 中文注释：TERMINATE 是业务层正常结束；max_turns 是系统层安全兜底。
+stateDiagram-v2
+    [*] --> Initializing: 启动程序
+    state "初始化：读取配置并创建团队" as Initializing
+    state "产品经理回合：分析需求" as ProductManagerTurn
+    state "工程师回合：提出实现" as EngineerTurn
+    state "审查员回合：检查代码" as CodeReviewerTurn
+    state "用户代理回合：人工验收" as UserProxyTurn
+    state "配置错误：参数或密钥无效" as ConfigurationError
+    state "业务终止：检测到 TERMINATE" as Terminated
+    state "安全终止：达到 max_turns" as TurnLimitReached
+    state "资源释放：关闭模型客户端" as ClosingClient
+    state "完成：返回结果摘要" as Completed
+
+    Initializing --> ProductManagerTurn: 初始化成功
+    Initializing --> ConfigurationError: 初始化失败
+    ConfigurationError --> [*]
+    ProductManagerTurn --> EngineerTurn: 固定轮询
+    EngineerTurn --> CodeReviewerTurn: 固定轮询
+    CodeReviewerTurn --> UserProxyTurn: 固定轮询
+    UserProxyTurn --> Terminated: 输入 TERMINATE
+    UserProxyTurn --> ProductManagerTurn: 输入修改意见
+    ProductManagerTurn --> TurnLimitReached: 达到轮数上限
+    EngineerTurn --> TurnLimitReached: 达到轮数上限
+    CodeReviewerTurn --> TurnLimitReached: 达到轮数上限
+    UserProxyTurn --> TurnLimitReached: 达到轮数上限
+    Terminated --> ClosingClient
+    TurnLimitReached --> ClosingClient
+    ClosingClient --> Completed
+    Completed --> [*]
+
+    note right of Terminated
+      正常完成路径：用户明确确认验收完成
+    end note
+    note right of TurnLimitReached
+      保护路径：避免 Agent 对话无限循环
+    end note
+

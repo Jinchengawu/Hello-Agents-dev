@@ -1,0 +1,19 @@
+%% 图 05：CAMEL 电子书协作写作 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：电子书创作任务"] --> C1
+    subgraph Local["本地实践边界：L6/L6-4/CAMEL"]
+        C1["RolePlaying 会话"]
+        C2["心理学家 Agent"]
+        C3["作家 Agent"]
+        C4["任务完成检测"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C4 --> O["输出：多轮协作内容"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

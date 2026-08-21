@@ -1,0 +1,5 @@
+hello-agents[evaluation]==0.2.7
+numpy==1.26.4
+bfcl-eval
+python-dotenv>=1,<2
+

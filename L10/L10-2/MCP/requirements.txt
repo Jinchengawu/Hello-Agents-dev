@@ -1,0 +1,4 @@
+hello-agents[protocol]==0.2.2
+fastmcp>=2,<3
+python-dotenv>=1,<2
+

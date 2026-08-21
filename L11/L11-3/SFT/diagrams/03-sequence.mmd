@@ -1,0 +1,22 @@
+%% 图 03：LoRA 与监督微调 UML 时序图
+%% 中文注释：纵向表示时间，箭头表示调用、数据或结果返回。
+sequenceDiagram
+    autonumber
+    actor User as 学习者/调用方
+    participant Entry as 入口脚本
+    participant C1 as 基础模型
+    participant C2 as LoRA 配置
+    participant C3 as SFT Trainer
+    participant C4 as 检查点与适配器
+    participant Ext as 外部资源
+    User->>Entry: 提供SFT 数据与训练配置
+    Note over User,Entry: 中文注释：从 03_lora_configuration.py / 04_sft_training.py 启动
+    Entry->>C1: 初始化并提交任务
+    C1->>C2: 传递阶段结果
+    C2->>C3: 传递阶段结果
+    C3->>C4: 传递阶段结果
+    C4->>Ext: 按需调用Hugging Face、GPU/Apple Silicon
+    Ext-->>C4: 返回外部结果
+    C4-->>Entry: 返回LoRA 适配器和检查点
+    Entry-->>User: 展示结果或错误
+    Note over Entry,Ext: 中文注释：异常时应保留上下文并明确失败阶段

@@ -1,0 +1,21 @@
+%% 图 05：Agent 经典模式 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：任务与模式选择"] --> C1
+    subgraph Local["本地实践边界：L7/L7-4/Agent-Patterns"]
+        C1["SimpleAgent"]
+        C2["ReActAgent"]
+        C3["ReflectionAgent"]
+        C4["PlanSolve 与 FunctionCall"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["可选工具"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：不同推理模式的结果"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

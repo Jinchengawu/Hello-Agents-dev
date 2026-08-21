@@ -1,0 +1,48 @@
+%% 图 03：四智能体协作 UML 时序图
+%% 中文注释：纵向表示时间；横向表示参与者；箭头表示消息或调用。
+sequenceDiagram
+    autonumber
+    actor User as 用户/终端
+    participant CLI as 主程序 main.py
+    participant Client as DeepSeek 模型客户端
+    participant Team as 轮询团队
+    participant PM as 产品经理
+    participant ENG as 工程师
+    participant REV as 代码审查员
+    participant UP as 用户代理
+
+    Note over User,CLI: 启动阶段：读取配置并提交开发任务
+    User->>CLI: 执行 python main.py --task ...
+    CLI->>CLI: 读取 .env、校验参数与 API Key
+    CLI->>Client: 创建 OpenAI-compatible 客户端
+    CLI->>Team: 创建四名参与者并提交任务
+
+    Note over Team,UP: 协作阶段：团队严格按参与者列表轮询
+    loop 未出现 TERMINATE 且未达到 max_turns
+        Team->>PM: 转交完整对话上下文
+        PM->>Client: 请求需求分析与项目规划
+        Client-->>PM: 返回 DeepSeek 响应
+        PM-->>Team: 分析结果和工程师交接语
+        Team->>ENG: 转交完整上下文
+        ENG->>Client: 请求技术实现
+        Client-->>ENG: 返回 DeepSeek 响应
+        ENG-->>Team: 实现代码和审查员交接语
+        Team->>REV: 转交完整上下文
+        REV->>Client: 请求代码审查
+        Client-->>REV: 返回 DeepSeek 响应
+        REV-->>Team: 审查意见和用户验收提示
+        Team->>UP: 请求用户验收
+        alt 自动验收模式 --auto-approve
+            UP-->>Team: 自动回复 TERMINATE
+        else 人工交互模式
+            Team-->>User: 显示输入提示
+            User->>UP: 输入修改意见或 TERMINATE
+            UP-->>Team: 返回用户输入
+        end
+    end
+
+    Note over CLI,Client: 收尾阶段：无论成功或异常，finally 都负责关闭客户端
+    Team-->>CLI: 返回 TaskResult
+    CLI->>Client: close() 释放连接
+    CLI-->>User: 输出中文协作摘要
+

@@ -1,0 +1,71 @@
+%% 图 02：AutoGen 运行时对象 UML 类图
+%% 中文注释：三个业务角色是 AssistantAgent 的实例，不是 Python 子类。
+classDiagram
+    class MainModule {
+        <<主程序模块 main.py>>
+        +main() 主入口
+        +parse_args() 解析命令行参数
+        +resolve_llm_api_key() 解析密钥
+        +validate_configuration() 校验配置
+        +create_openai_model_client() 创建模型客户端
+        +create_product_manager() 创建产品经理实例
+        +create_engineer() 创建工程师实例
+        +create_code_reviewer() 创建审查员实例
+        +create_user_proxy() 创建用户代理实例
+        +create_team() 组装轮询团队
+        +run_software_development_team() 执行协作
+    }
+    class OpenAIChatCompletionClient {
+        <<模型客户端：实际连接 DeepSeek>>
+        +model 模型名称
+        +base_url 服务地址
+        +create() 发起模型请求
+        +close() 释放网络资源
+    }
+    class AssistantAgent {
+        <<模型型智能体：共 3 个实例>>
+        +name 角色名称
+        +system_message 角色规则
+        +model_client 共享模型客户端
+        +on_messages() 处理上下文并回复
+    }
+    class UserProxyAgent {
+        <<人工输入代理：共 1 个实例>>
+        +name 用户代理名称
+        +description 验收职责
+        +input_func 输入函数
+        +on_messages() 接收人工反馈
+    }
+    class RoundRobinGroupChat {
+        <<团队调度器>>
+        +participants 四名参与者
+        +termination_condition 终止规则
+        +max_turns 最大轮数
+        +run_stream() 按顺序产生消息流
+    }
+    class TextMentionTermination {
+        <<业务终止条件>>
+        +text 关键词 TERMINATE
+        +check() 检查消息文本
+    }
+    class Console {
+        <<终端流式界面>>
+        +consume() 消费并显示消息流
+    }
+
+    MainModule ..> OpenAIChatCompletionClient : 创建
+    MainModule ..> AssistantAgent : 创建三个实例
+    MainModule ..> UserProxyAgent : 创建一个实例
+    MainModule ..> RoundRobinGroupChat : 组装
+    MainModule ..> Console : 调用显示
+    AssistantAgent --> OpenAIChatCompletionClient : 共享并调用
+    RoundRobinGroupChat "1 个团队" o-- "3 个模型型角色" AssistantAgent : 组合参与者
+    RoundRobinGroupChat "1 个团队" o-- "1 个人工角色" UserProxyAgent : 组合参与者
+    RoundRobinGroupChat --> TextMentionTermination : 每条消息后检查
+    Console --> RoundRobinGroupChat : 消费消息流
+
+    note for AssistantAgent "ProductManager、Engineer、CodeReviewer\n只是不同配置的三个实例，并未定义三个子类。"
+    note for UserProxyAgent "交互模式读取用户输入；\n--auto-approve 模式自动返回 TERMINATE。"
+    note for RoundRobinGroupChat "列表顺序决定发言顺序；\n它负责调度，而不是让模型选择下一位角色。"
+    note for OpenAIChatCompletionClient "类名来自 OpenAI-compatible SDK；\n本项目的 model/base_url/API Key 均指向 DeepSeek。"
+

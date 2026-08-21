@@ -1,0 +1,23 @@
+%% 图 05：文档问答助手 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：文档文件与问题"] --> C1
+    subgraph Local["本地实践边界：L8/L8-4/Document-QA"]
+        C1["文档处理"]
+        C2["RAGTool"]
+        C3["问答 Agent"]
+        C4["Gradio 界面"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["向量数据库"]
+        R3["Gradio"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C3 -. "访问" .-> R3
+    C4 --> O["输出：文档依据回答"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

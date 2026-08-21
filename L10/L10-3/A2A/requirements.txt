@@ -1,0 +1,4 @@
+hello-agents[protocol]==0.2.2
+a2a-sdk>=0.3,<1
+python-dotenv>=1,<2
+

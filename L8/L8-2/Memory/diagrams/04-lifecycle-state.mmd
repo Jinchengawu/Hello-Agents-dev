@@ -1,0 +1,26 @@
+%% 图 04：Agent 记忆系统 生命周期状态图
+%% 中文注释：正常路径逐步推进，任一关键阶段失败都进入错误状态。
+stateDiagram-v2
+    [*] --> S1: 启动
+    state "接收信息" as S1
+    state "写入工作记忆" as S2
+    state "持久化长期记忆" as S3
+    state "检索与整合" as S4
+    state "注入上下文" as S5
+    state "失败：记录原因并安全退出" as Failed
+    state "完成：产物可检查" as Completed
+    S1 --> S2: 阶段成功
+    S2 --> S3: 阶段成功
+    S3 --> S4: 阶段成功
+    S4 --> S5: 阶段成功
+    S5 --> Completed: 结果验证通过
+    Completed --> [*]
+    S1 --> Failed: 配置、依赖或执行异常
+    S2 --> Failed: 配置、依赖或执行异常
+    S3 --> Failed: 配置、依赖或执行异常
+    S4 --> Failed: 配置、依赖或执行异常
+    S5 --> Failed: 配置、依赖或执行异常
+    Failed --> [*]
+    note right of Failed
+      中文注释：先定位当前阶段，再检查该阶段依赖
+    end note

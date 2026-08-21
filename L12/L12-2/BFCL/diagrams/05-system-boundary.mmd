@@ -1,0 +1,21 @@
+%% 图 05：BFCL 函数调用评估 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：BFCL 函数调用题集"] --> C1
+    subgraph Local["本地实践边界：L12/L12-2/BFCL"]
+        C1["BFCLDataset"]
+        C2["待评估 Agent"]
+        C3["BFCLEvaluator"]
+        C4["官方格式导出与评分"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["BFCL/Gorilla 数据"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：预测文件和评分报告"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

@@ -1,0 +1,21 @@
+%% 图 05：基础 Agent 评估对象 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：需要最新信息的问题"] --> C1
+    subgraph Local["本地实践边界：L12/L12-1/Basic-Agent"]
+        C1["HelloAgentsLLM"]
+        C2["SimpleAgent"]
+        C3["SearchTool"]
+        C4["响应输出"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+        R2["搜索 API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C4 --> O["输出：带搜索结果的 Agent 回答"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

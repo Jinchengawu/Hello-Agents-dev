@@ -1,0 +1,39 @@
+%% 图 02：训练数据与奖励函数 UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行数据集加载器职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行格式转换职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行准确率奖励职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行格式与过程奖励职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 01_dataset_loading.py / 02_reward_functions.py"
+    note for Core1 "中文职责：数据集加载器"
+    note for Core2 "中文职责：格式转换"
+    note for Core3 "中文职责：准确率奖励"
+    note for Core4 "中文职责：格式与过程奖励"
+    note for ExternalResource "中文注释：Hugging Face Datasets"

@@ -1,0 +1,10 @@
+# 教程使用的 AutoGen 版本
+autogen-agentchat==0.7.4
+autogen-ext[openai]==0.7.4
+openai>=1.93,<2
+httpx[socks]>=0.27,<1
+python-dotenv>=1.0,<2
+
+# AutoGen 团队生成的 output.py 所需依赖
+requests>=2.31,<3
+streamlit>=1.28,<2

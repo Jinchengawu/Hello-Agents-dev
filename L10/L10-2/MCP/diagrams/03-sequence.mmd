@@ -1,0 +1,22 @@
+%% 图 03：MCP 连接与多 Agent 协作 UML 时序图
+%% 中文注释：纵向表示时间，箭头表示调用、数据或结果返回。
+sequenceDiagram
+    autonumber
+    actor User as 学习者/调用方
+    participant Entry as 入口脚本
+    participant C1 as MCP 客户端
+    participant C2 as Transport 传输层
+    participant C3 as MCP 工具服务器
+    participant C4 as 多 Agent 文档助手
+    participant Ext as 外部资源
+    User->>Entry: 提供MCP 请求与文档任务
+    Note over User,Entry: 中文注释：从 02–06 系列脚本 / my_mcp_server.py 启动
+    Entry->>C1: 初始化并提交任务
+    C1->>C2: 传递阶段结果
+    C2->>C3: 传递阶段结果
+    C3->>C4: 传递阶段结果
+    C4->>Ext: 按需调用MCP Server、GitHub MCP、DeepSeek API
+    Ext-->>C4: 返回外部结果
+    C4-->>Entry: 返回工具结果或协作文档
+    Entry-->>User: 展示结果或错误
+    Note over Entry,Ext: 中文注释：异常时应保留上下文并明确失败阶段

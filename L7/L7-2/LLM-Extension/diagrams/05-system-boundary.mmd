@@ -1,0 +1,19 @@
+%% 图 05：自定义 LLM Provider 扩展 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：消息列表与模型配置"] --> C1
+    subgraph Local["本地实践边界：L7/L7-2/LLM-Extension"]
+        C1["MyLLM 扩展类"]
+        C2["DeepSeek Provider 配置"]
+        C3["OpenAI-compatible 客户端"]
+        C4["流式输出"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["DeepSeek API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C4 --> O["输出：DeepSeek 流式响应"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

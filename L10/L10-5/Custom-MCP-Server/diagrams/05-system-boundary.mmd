@@ -1,0 +1,23 @@
+%% 图 05：自定义天气 MCP Server 系统边界图
+%% 中文注释：边界内是本地实践代码，边界外是网络、模型、数据库或运行设备。
+flowchart LR
+    I["输入：城市与天气请求"] --> C1
+    subgraph Local["本地实践边界：L10/L10-5/Custom-MCP-Server"]
+        C1["天气 MCP Server"]
+        C2["天气工具"]
+        C3["MCP 客户端 Agent"]
+        C4["集成测试"]
+    end
+    subgraph External["外部依赖边界"]
+        R1["天气 API"]
+        R2["本地 MCP 端口"]
+        R3["DeepSeek API"]
+    end
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C1 -. "访问" .-> R1
+    C2 -. "访问" .-> R2
+    C3 -. "访问" .-> R3
+    C4 --> O["输出：天气数据和 Agent 回答"]
+    N["中文注释：外部资源异常不应被误判为本地业务逻辑错误"] -.-> External

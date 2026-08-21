@@ -1,0 +1,22 @@
+%% 图 03：Agent 工具系统 UML 时序图
+%% 中文注释：纵向表示时间，箭头表示调用、数据或结果返回。
+sequenceDiagram
+    autonumber
+    actor User as 学习者/调用方
+    participant Entry as 入口脚本
+    participant C1 as CalculatorTool
+    participant C2 as AdvancedSearchTool
+    participant C3 as 工具参数校验
+    participant C4 as Agent 工具调用
+    participant Ext as 外部资源
+    User->>Entry: 提供工具名称与参数
+    Note over User,Entry: 中文注释：从 test_my_calculator.py / test_advanced_search.py 启动
+    Entry->>C1: 初始化并提交任务
+    C1->>C2: 传递阶段结果
+    C2->>C3: 传递阶段结果
+    C3->>C4: 传递阶段结果
+    C4->>Ext: 按需调用搜索服务 API
+    Ext-->>C4: 返回外部结果
+    C4-->>Entry: 返回计算或搜索结果
+    Entry-->>User: 展示结果或错误
+    Note over Entry,Ext: 中文注释：异常时应保留上下文并明确失败阶段

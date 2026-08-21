@@ -1,0 +1,39 @@
+%% 图 02：GSSC ContextBuilder UML 组件/类关系图
+%% 中文注释：该图表达学习层面的职责关系；概念组件不一定都是 Python 子类。
+classDiagram
+    class EntryModule {
+        <<入口模块>>
+        +load_config() 读取配置
+        +run() 启动实践
+    }
+    class Core1 {
+        <<核心组件 1>>
+        +execute() 执行目标 Goal职责
+    }
+    class Core2 {
+        <<核心组件 2>>
+        +execute() 执行状态 State职责
+    }
+    class Core3 {
+        <<核心组件 3>>
+        +execute() 执行步骤 Step职责
+    }
+    class Core4 {
+        <<核心组件 4>>
+        +execute() 执行上下文构建器职责
+    }
+    class ExternalResource {
+        <<外部资源>>
+        +connect() 建立连接
+    }
+    EntryModule ..> Core1 : 创建或调用
+    Core1 --> Core2 : 传递控制或数据
+    Core2 --> Core3 : 传递控制或数据
+    Core3 --> Core4 : 传递控制或数据
+    Core4 ..> ExternalResource : 按需访问
+    note for EntryModule "中文注释：实际入口为 01_context_builder_basic.py / 02_context_builder_with_agent.py"
+    note for Core1 "中文职责：目标 Goal"
+    note for Core2 "中文职责：状态 State"
+    note for Core3 "中文职责：步骤 Step"
+    note for Core4 "中文职责：上下文构建器"
+    note for ExternalResource "中文注释：DeepSeek API、Memory/RAG"
