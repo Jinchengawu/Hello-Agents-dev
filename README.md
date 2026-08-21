@@ -85,4 +85,9 @@ UML 组件/类关系、UML 时序、生命周期、系统边界、数据流和�
 python scripts/verify_archive.py
 ```
 
+## 复用到其他课程
+
+如果要让其他模型或 coding harness 按照本工程的目录、中文图表和验证规范继续生成
+其他课程章节，可直接使用 [课程实践归档生成提示词](./COURSE_ARCHIVE_PROMPT.md)。
+
 来源：<https://github.com/datawhalechina/hello-agents>
